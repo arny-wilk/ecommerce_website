@@ -1,24 +1,19 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from .models import UserManager
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=128, write_only=True, required=True, style={'input_type': 'password'})
 
     class Meta:
-        model = User
-        fields = ('pk', 'first_name', 'last_name', 'email', 'password', 'registration_date')
+        model = UserManager
+        fields = ('email', 'user_name', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = super().create(validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
-    def update(self, instance, validated_data):
-        user = super().update(instance, validated_data)
-        if KeyError:
-            raise f"Wrong Password ! {KeyError}"
-        user.set_password(validated_data['password'])
-        user.save()
-        return user

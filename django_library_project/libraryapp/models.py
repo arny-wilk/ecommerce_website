@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db.models import CharField, EmailField, DateTimeField
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -44,7 +45,7 @@ class UserManager(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD: str = "email"
     REQUIRED_FIELDS = ['user_name']
-
+        
     def __str__(self):
         return f"{self.email} {self.user_name} {self.registration_date} {self.is_staff} {self.is_admin} {self.is_active}"
 
